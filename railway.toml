@@ -1,0 +1,9 @@
+[build]
+builder = "NIXPACKS"
+buildCommand = "pip install -r egyptian-house-price-app-redesigned/egyptian-house-price-app/backend/requirements.txt && npm --prefix egyptian-house-price-app-redesigned/egyptian-house-price-app/frontend install && npm --prefix egyptian-house-price-app-redesigned/egyptian-house-price-app/frontend run build"
+
+[deploy]
+startCommand = "gunicorn --chdir egyptian-house-price-app-redesigned/egyptian-house-price-app/backend app:app"
+healthcheckPath = "/api/health"
+healthcheckTimeout = 100
+restartPolicyType = "ON_FAILURE"
