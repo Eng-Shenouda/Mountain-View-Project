@@ -6,7 +6,7 @@ import Select from "./ui/Select.jsx";
 import Input from "./ui/Input.jsx";
 import Button from "./ui/Button.jsx";
 
-const API_BASE = "http://localhost:5000/api";
+const API_BASE = import.meta.env.VITE_API_BASE || "/api";
 
 const EMPTY_FORM = {
   city: "",
