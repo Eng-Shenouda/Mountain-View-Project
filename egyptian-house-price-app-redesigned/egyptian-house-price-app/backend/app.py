@@ -16,10 +16,11 @@ Endpoints
 import os
 import joblib
 import pandas as pd
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
 
 MODEL_PATH = os.path.join(os.path.dirname(__file__), "house_price_model.pkl")
+FRONTEND_DIST = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "frontend", "dist"))
 
 app = Flask(__name__)
 CORS(app)  # allow the React dev server (different port) to call this API
@@ -102,6 +103,14 @@ def predict():
     })
 
 
+@app.route("/", defaults={"path": ""})
+@app.route("/<path:path>")
+def frontend(path):
+    requested_file = os.path.join(FRONTEND_DIST, path)
+    if path and os.path.isfile(requested_file):
+        return send_from_directory(FRONTEND_DIST, path)
+    return send_from_directory(FRONTEND_DIST, "index.html")
+
+
 if __name__ == "__main__":
-    # debug=True is fine for local student-project use only
-    app.run(host="0.0.0.0", port=5000, debug=True)
+    app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
